@@ -30,7 +30,8 @@ export const RECOMMENDED_BOOKS: Book[] = [
 ];
 
 export const FUTSAL_RESULTS: GameResult[] = [
-  { id: "1", teamA: "3º A", scoreA: 2, teamB: "3º B", scoreB: 1, status: "Finalizado", date: "10/03/26", sport: 'futsal' },
+  // FIX: Changed status 'Finalizado' to 'Encerrado' to match the GameResult status union type.
+  { id: "1", teamA: "3º A", scoreA: 2, teamB: "3º B", scoreB: 1, status: "Encerrado", date: "10/03/26", sport: 'futsal' },
 ];
 
 export const Icons = {
