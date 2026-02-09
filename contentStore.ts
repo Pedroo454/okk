@@ -7,10 +7,11 @@ import {
   getDocs, 
   deleteDoc, 
   doc, 
+  updateDoc,
   query, 
   orderBy 
 } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
-import { NewsItem, Album, GameResult, Book, EventDate, Announcement } from './types';
+import { NewsItem, Album, GameResult, Book, EventDate, Announcement, Vestibular } from './types';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBxrqQN_V7pK5Se6UA_Puj0PRu_5gYswtc",
@@ -40,30 +41,42 @@ export const contentStore = {
   // Notícias
   getNews: () => contentStore.fetchCollection<NewsItem>('news'),
   saveNews: (news: Omit<NewsItem, 'id'>) => addDoc(collection(db, 'news'), { ...news, serverTimestamp: new Date() }),
+  updateNews: (id: string, data: Partial<NewsItem>) => updateDoc(doc(db, 'news', id), data),
   deleteNews: (id: string) => deleteDoc(doc(db, 'news', id)),
 
-  // Avisos (Quadro de Avisos)
+  // Avisos
   getAnnouncements: () => contentStore.fetchCollection<Announcement>('announcements'),
   saveAnnouncement: (ann: Omit<Announcement, 'id'>) => addDoc(collection(db, 'announcements'), { ...ann, serverTimestamp: new Date() }),
+  updateAnnouncement: (id: string, data: Partial<Announcement>) => updateDoc(doc(db, 'announcements', id), data),
   deleteAnnouncement: (id: string) => deleteDoc(doc(db, 'announcements', id)),
 
-  // Galeria de Fotos
+  // Galeria
   getAlbums: () => contentStore.fetchCollection<Album>('albums'),
   saveAlbum: (album: Omit<Album, 'id'>) => addDoc(collection(db, 'albums'), { ...album, serverTimestamp: new Date() }),
+  updateAlbum: (id: string, data: Partial<Album>) => updateDoc(doc(db, 'albums', id), data),
   deleteAlbum: (id: string) => deleteDoc(doc(db, 'albums', id)),
 
-  // Interclasses (Jogos)
+  // Jogos
   getGames: () => contentStore.fetchCollection<GameResult>('games'),
   saveGame: (game: Omit<GameResult, 'id'>) => addDoc(collection(db, 'games'), { ...game, serverTimestamp: new Date() }),
+  updateGame: (id: string, data: Partial<GameResult>) => updateDoc(doc(db, 'games', id), data),
   deleteGame: (id: string) => deleteDoc(doc(db, 'games', id)),
 
-  // Livros (Estudos)
+  // Livros
   getBooks: () => contentStore.fetchCollection<Book>('books', 'title', 'asc'),
   saveBook: (book: Omit<Book, 'id'>) => addDoc(collection(db, 'books'), { ...book, serverTimestamp: new Date() }),
+  updateBook: (id: string, data: Partial<Book>) => updateDoc(doc(db, 'books', id), data),
   deleteBook: (id: string) => deleteDoc(doc(db, 'books', id)),
 
-  // Agenda (Eventos da Home)
+  // Agenda
   getEvents: () => contentStore.fetchCollection<EventDate>('events', 'date', 'asc'),
   saveEvent: (event: Omit<EventDate, 'id'>) => addDoc(collection(db, 'events'), { ...event, serverTimestamp: new Date() }),
-  deleteEvent: (id: string) => deleteDoc(doc(db, 'events', id))
+  updateEvent: (id: string, data: Partial<EventDate>) => updateDoc(doc(db, 'events', id), data),
+  deleteEvent: (id: string) => deleteDoc(doc(db, 'events', id)),
+
+  // Vestibulares
+  getVestibulares: () => contentStore.fetchCollection<Vestibular>('vestibulares', 'date', 'asc'),
+  saveVestibular: (v: Omit<Vestibular, 'id'>) => addDoc(collection(db, 'vestibulares'), { ...v, serverTimestamp: new Date() }),
+  updateVestibular: (id: string, data: Partial<Vestibular>) => updateDoc(doc(db, 'vestibulares', id), data),
+  deleteVestibular: (id: string) => deleteDoc(doc(db, 'vestibulares', id))
 };
