@@ -54,8 +54,9 @@ export interface GameResult {
   scoreA: number;
   teamB: string;
   scoreB: number;
-  status: 'Finalizado' | 'Agendado';
+  status: 'Encerrado' | 'Em Andamento' | 'Em Breve';
   date: string;
+  time?: string;
   sport: 'futsal' | 'chess' | 'pingpong';
 }
 
