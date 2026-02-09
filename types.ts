@@ -35,6 +35,12 @@ export interface EventDate {
   type: 'Prova' | 'Vestibular' | 'Evento';
 }
 
+export interface Vestibular {
+  id: string;
+  name: string;
+  date: string;
+}
+
 export interface Book {
   id: string;
   title: string;
