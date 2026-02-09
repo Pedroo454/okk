@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { GameResult } from '../types';
 import { contentStore } from '../contentStore';
-import { FUTSAL_RESULTS } from '../constants';
 
 const InterclassesPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'futsal' | 'pingpong' | 'chess'>('futsal');
@@ -12,13 +11,26 @@ const InterclassesPage: React.FC = () => {
   useEffect(() => {
     const load = async () => {
       const data = await contentStore.getGames();
-      setGames(data.length > 0 ? data : FUTSAL_RESULTS as any);
+      setGames(data);
       setIsLoading(false);
     };
     load();
   }, []);
 
   const filteredGames = games.filter(g => g.sport === activeTab);
+
+  const getStatusBadge = (status: GameResult['status']) => {
+    switch (status) {
+      case 'Em Andamento':
+        return <span className="bg-red-600 text-white px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest animate-pulse flex items-center"><span className="w-1.5 h-1.5 bg-white rounded-full mr-2"></span>Ao Vivo</span>;
+      case 'Encerrado':
+        return <span className="bg-slate-200 text-slate-500 px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest">Encerrado</span>;
+      case 'Em Breve':
+        return <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest">Em Breve</span>;
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className="container mx-auto px-4 py-16">
@@ -38,18 +50,46 @@ const InterclassesPage: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
         <div className="space-y-6">
           {filteredGames.map((game, i) => (
-            <div key={i} className="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-100 flex items-center justify-between hover:border-blue-200 transition-all">
-              <div className="flex-1 text-right font-black text-xl text-blue-900 uppercase italic">{game.teamA}</div>
-              <div className="mx-8 flex items-center space-x-4">
-                <span className="text-3xl font-black text-blue-900">{game.scoreA}</span>
-                <span className="text-slate-300 font-black text-xs">VS</span>
-                <span className="text-3xl font-black text-blue-900">{game.scoreB}</span>
+            <div key={game.id} className={`bg-white p-8 rounded-[2rem] shadow-sm border ${game.status === 'Em Andamento' ? 'border-red-400 shadow-lg' : 'border-slate-100'} flex flex-col hover:border-blue-200 transition-all`}>
+              <div className="flex justify-between items-center mb-6">
+                 <div className="flex items-center space-x-3">
+                   {getStatusBadge(game.status)}
+                   {game.status === 'Em Breve' && (
+                     <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                       {game.date} às {game.time}
+                     </span>
+                   )}
+                 </div>
+                 <span className="text-[9px] font-black text-slate-300 uppercase tracking-widest">{game.sport}</span>
               </div>
-              <div className="flex-1 text-left font-black text-xl text-blue-900 uppercase italic">{game.teamB}</div>
+
+              <div className="flex items-center justify-between">
+                <div className="flex-1 text-center">
+                   <div className="font-black text-2xl text-blue-900 uppercase italic truncate">{game.teamA}</div>
+                </div>
+                
+                <div className="mx-8 flex flex-col items-center">
+                  <div className="flex items-center space-x-6">
+                    <span className={`text-4xl font-black ${game.status === 'Em Breve' ? 'text-slate-200' : 'text-blue-900'}`}>{game.scoreA}</span>
+                    <span className="text-slate-300 font-black text-xs italic">X</span>
+                    <span className={`text-4xl font-black ${game.status === 'Em Breve' ? 'text-slate-200' : 'text-blue-900'}`}>{game.scoreB}</span>
+                  </div>
+                </div>
+
+                <div className="flex-1 text-center">
+                   <div className="font-black text-2xl text-blue-900 uppercase italic truncate">{game.teamB}</div>
+                </div>
+              </div>
+              
+              {game.status === 'Encerrado' && (
+                <div className="mt-6 pt-4 border-t border-slate-50 text-center">
+                   <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Partida Realizada em {game.date}</span>
+                </div>
+              )}
             </div>
           ))}
           {filteredGames.length === 0 && (
-            <div className="text-center py-20 bg-white rounded-3xl border-2 border-dashed border-slate-100">
+            <div className="text-center py-20 bg-white rounded-[3rem] border-2 border-dashed border-slate-100">
                <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest">Nenhum placar registrado para esta categoria.</p>
             </div>
           )}
