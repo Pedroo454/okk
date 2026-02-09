@@ -63,7 +63,7 @@ const AdminPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       if (editingId) {
         if (activeTab === 'news') await contentStore.updateNews(editingId, forms.news);
         if (activeTab === 'announcements') await contentStore.updateAnnouncement(editingId, forms.ann);
-        if (activeTab === 'gallery') await contentStore.updateAlbum(editingId, { ...forms.album, images: forms.album.imagesStr.split(',').map(s=>s.trim()) });
+        if (activeTab === 'gallery') await contentStore.updateAlbum(editingId, { title: forms.album.title, coverImage: forms.album.coverImage, images: forms.album.imagesStr.split(',').map(s=>s.trim()) });
         if (activeTab === 'interclasses') await contentStore.updateGame(editingId, forms.game);
         if (activeTab === 'studies') await contentStore.updateBook(editingId, forms.book);
         if (activeTab === 'agenda') await contentStore.updateEvent(editingId, forms.event);
@@ -134,7 +134,7 @@ const AdminPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         <h1 className="text-2xl font-black text-blue-900 uppercase italic">Gestão Américo Franco</h1>
         <div className="flex bg-slate-50 p-1.5 rounded-2xl overflow-x-auto gap-1">
           {['news', 'announcements', 'gallery', 'interclasses', 'studies', 'agenda', 'vestibulares', 'feedback'].map(t => (
-            <button key={t} onClick={() => { setActiveTab(t as any); setEditingId(null); setForms(initialForms); }} className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase transition-all ${activeTab === t ? 'bg-blue-800 text-white' : 'text-slate-400'}`}>
+            <button key={t} onClick={() => { setActiveTab(t as any); setEditingId(null); setForms(initialForms); }} className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase transition-all flex-shrink-0 ${activeTab === t ? 'bg-blue-800 text-white' : 'text-slate-400'}`}>
               {t === 'news' ? 'Notícias' : t === 'announcements' ? 'Avisos' : t === 'gallery' ? 'Galeria' : t === 'interclasses' ? 'Jogos' : t === 'studies' ? 'Livros' : t === 'agenda' ? 'Agenda' : t === 'vestibulares' ? 'Vestibulares' : 'Mural'}
             </button>
           ))}
@@ -155,6 +155,24 @@ const AdminPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   <textarea placeholder="Conteúdo" rows={5} className="w-full bg-slate-50 p-4 rounded-xl text-xs" value={forms.news.content} onChange={e => setForms({...forms, news: {...forms.news, content: e.target.value}})} />
                   <input placeholder="URL Capa" className="w-full bg-slate-50 p-4 rounded-xl text-xs" value={forms.news.image} onChange={e => setForms({...forms, news: {...forms.news, image: e.target.value}})} />
                   <input placeholder="YouTube Link" className="w-full bg-slate-50 p-4 rounded-xl text-xs" value={forms.news.youtubeUrl} onChange={e => setForms({...forms, news: {...forms.news, youtubeUrl: e.target.value}})} />
+                </>
+              )}
+
+              {activeTab === 'announcements' && (
+                <>
+                  <input placeholder="Título" className="w-full bg-slate-50 p-4 rounded-xl text-xs font-bold" value={forms.ann.title} onChange={e => setForms({...forms, ann: {...forms.ann, title: e.target.value}})} />
+                  <textarea placeholder="Aviso" rows={4} className="w-full bg-slate-50 p-4 rounded-xl text-xs" value={forms.ann.content} onChange={e => setForms({...forms, ann: {...forms.ann, content: e.target.value}})} />
+                  <select className="w-full bg-slate-50 p-4 rounded-xl text-xs font-bold" value={forms.ann.category} onChange={e => setForms({...forms, ann: {...forms.ann, category: e.target.value as any}})}>
+                    <option>Geral</option><option>Urgente</option><option>Evento</option>
+                  </select>
+                </>
+              )}
+
+              {activeTab === 'gallery' && (
+                <>
+                  <input placeholder="Título Álbum" className="w-full bg-slate-50 p-4 rounded-xl text-xs font-bold" value={forms.album.title} onChange={e => setForms({...forms, album: {...forms.album, title: e.target.value}})} />
+                  <input placeholder="URL Capa" className="w-full bg-slate-50 p-4 rounded-xl text-xs" value={forms.album.coverImage} onChange={e => setForms({...forms, album: {...forms.album, coverImage: e.target.value}})} />
+                  <textarea placeholder="Fotos (Links separados por vírgula)" rows={4} className="w-full bg-slate-50 p-4 rounded-xl text-xs" value={forms.album.imagesStr} onChange={e => setForms({...forms, album: {...forms.album, imagesStr: e.target.value}})} />
                 </>
               )}
 
@@ -197,14 +215,20 @@ const AdminPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 </>
               )}
 
-              {/* ... Outros formulários permanecem iguais ao anterior ... */}
-              {activeTab === 'announcements' && (
+              {activeTab === 'agenda' && (
                 <>
-                  <input placeholder="Título" className="w-full bg-slate-50 p-4 rounded-xl text-xs font-bold" value={forms.ann.title} onChange={e => setForms({...forms, ann: {...forms.ann, title: e.target.value}})} />
-                  <textarea placeholder="Aviso" rows={4} className="w-full bg-slate-50 p-4 rounded-xl text-xs" value={forms.ann.content} onChange={e => setForms({...forms, ann: {...forms.ann, content: e.target.value}})} />
-                  <select className="w-full bg-slate-50 p-4 rounded-xl text-xs font-bold" value={forms.ann.category} onChange={e => setForms({...forms, ann: {...forms.ann, category: e.target.value as any}})}>
-                    <option>Geral</option><option>Urgente</option><option>Evento</option>
+                  <input placeholder="Título Evento" className="w-full bg-slate-50 p-4 rounded-xl text-xs font-bold" value={forms.event.title} onChange={e => setForms({...forms, event: {...forms.event, title: e.target.value}})} />
+                  <input placeholder="Data (Ex: 15/05)" className="w-full bg-slate-50 p-4 rounded-xl text-xs font-bold" value={forms.event.date} onChange={e => setForms({...forms, event: {...forms.event, date: e.target.value}})} />
+                  <select className="w-full bg-slate-50 p-4 rounded-xl text-xs font-bold" value={forms.event.type} onChange={e => setForms({...forms, event: {...forms.event, type: e.target.value as any}})}>
+                    <option value="Evento">Geral</option><option value="Prova">Prova</option><option value="Vestibular">Vestibular</option>
                   </select>
+                </>
+              )}
+
+              {activeTab === 'vestibulares' && (
+                <>
+                  <input placeholder="Nome Vestibular" className="w-full bg-slate-50 p-4 rounded-xl text-xs font-bold" value={forms.vestibular.name} onChange={e => setForms({...forms, vestibular: {...forms.vestibular, name: e.target.value}})} />
+                  <input placeholder="Mês/Data" className="w-full bg-slate-50 p-4 rounded-xl text-xs" value={forms.vestibular.date} onChange={e => setForms({...forms, vestibular: {...forms.vestibular, date: e.target.value}})} />
                 </>
               )}
 
@@ -223,17 +247,35 @@ const AdminPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             <div className="space-y-3">
               {activeTab === 'news' && data.news.map(n => (
                 <div key={n.id} className="flex justify-between items-center bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                  <span className="text-xs font-bold">{n.title}</span>
-                  <div className="flex space-x-2">
+                  <span className="text-xs font-bold truncate pr-4">{n.title}</span>
+                  <div className="flex space-x-2 flex-shrink-0">
                     <button onClick={() => startEdit('news', n)} className="text-blue-600 font-black text-[9px] uppercase">Editar</button>
                     <button onClick={() => handleDelete('news', n.id)} className="text-red-500 font-black text-[9px] uppercase">Excluir</button>
                   </div>
                 </div>
               ))}
+              {activeTab === 'announcements' && data.anns.map(a => (
+                <div key={a.id} className="flex justify-between items-center bg-slate-50 p-4 rounded-2xl">
+                  <span className="text-xs font-bold truncate pr-4">{a.title}</span>
+                  <div className="flex space-x-2 flex-shrink-0">
+                    <button onClick={() => startEdit('ann', a)} className="text-blue-600 font-black text-[9px] uppercase">Editar</button>
+                    <button onClick={() => handleDelete('ann', a.id)} className="text-red-500 font-black text-[9px] uppercase">Excluir</button>
+                  </div>
+                </div>
+              ))}
+              {activeTab === 'gallery' && data.albums.map(al => (
+                <div key={al.id} className="flex justify-between items-center bg-slate-50 p-4 rounded-2xl">
+                  <span className="text-xs font-bold truncate pr-4">{al.title}</span>
+                  <div className="flex space-x-2 flex-shrink-0">
+                    <button onClick={() => startEdit('album', al)} className="text-blue-600 font-black text-[9px] uppercase">Editar</button>
+                    <button onClick={() => handleDelete('album', al.id)} className="text-red-500 font-black text-[9px] uppercase">Excluir</button>
+                  </div>
+                </div>
+              ))}
               {activeTab === 'interclasses' && data.games.map(g => (
                 <div key={g.id} className="flex justify-between items-center bg-slate-50 p-4 rounded-2xl">
-                  <span className="text-xs font-bold">{g.teamA} x {g.teamB} ({g.status})</span>
-                  <div className="flex space-x-2">
+                  <span className="text-xs font-bold truncate pr-4">{g.teamA} x {g.teamB}</span>
+                  <div className="flex space-x-2 flex-shrink-0">
                     <button onClick={() => startEdit('game', g)} className="text-blue-600 font-black text-[9px] uppercase">Editar</button>
                     <button onClick={() => handleDelete('game', g.id)} className="text-red-500 font-black text-[9px] uppercase">Excluir</button>
                   </div>
@@ -241,14 +283,40 @@ const AdminPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               ))}
               {activeTab === 'studies' && data.books.map(b => (
                 <div key={b.id} className="flex justify-between items-center bg-slate-50 p-4 rounded-2xl">
-                  <span className="text-xs font-bold">{b.title} ({b.grade})</span>
-                  <div className="flex space-x-2">
+                  <span className="text-xs font-bold truncate pr-4">{b.title}</span>
+                  <div className="flex space-x-2 flex-shrink-0">
                     <button onClick={() => startEdit('book', b)} className="text-blue-600 font-black text-[9px] uppercase">Editar</button>
                     <button onClick={() => handleDelete('book', b.id)} className="text-red-500 font-black text-[9px] uppercase">Excluir</button>
                   </div>
                 </div>
               ))}
-              {/* ... Outros itens ... */}
+              {activeTab === 'agenda' && data.events.map(ev => (
+                <div key={ev.id} className="flex justify-between items-center bg-slate-50 p-4 rounded-2xl">
+                  <span className="text-xs font-bold truncate pr-4">{ev.title} ({ev.date})</span>
+                  <div className="flex space-x-2 flex-shrink-0">
+                    <button onClick={() => startEdit('event', ev)} className="text-blue-600 font-black text-[9px] uppercase">Editar</button>
+                    <button onClick={() => handleDelete('event', ev.id)} className="text-red-500 font-black text-[9px] uppercase">Excluir</button>
+                  </div>
+                </div>
+              ))}
+              {activeTab === 'vestibulares' && data.vestibulares.map(v => (
+                <div key={v.id} className="flex justify-between items-center bg-slate-50 p-4 rounded-2xl">
+                  <span className="text-xs font-bold truncate pr-4">{v.name} ({v.date})</span>
+                  <div className="flex space-x-2 flex-shrink-0">
+                    <button onClick={() => startEdit('vest', v)} className="text-blue-600 font-black text-[9px] uppercase">Editar</button>
+                    <button onClick={() => handleDelete('vest', v.id)} className="text-red-500 font-black text-[9px] uppercase">Excluir</button>
+                  </div>
+                </div>
+              ))}
+              {activeTab === 'feedback' && data.feedbacks.map(f => (
+                <div key={f.id} className="bg-slate-50 p-6 rounded-2xl border-l-4 border-blue-800">
+                  <p className="text-sm italic mb-4">"{f.message}"</p>
+                  <div className="flex justify-between text-[10px] font-black uppercase text-slate-400">
+                    <span>{f.name} - {f.category}</span>
+                    <button onClick={() => feedbackStore.remove(f.id).then(refresh)} className="text-red-400">Remover</button>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
