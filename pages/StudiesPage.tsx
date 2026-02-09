@@ -1,16 +1,21 @@
 
 import React, { useState, useEffect } from 'react';
 import { contentStore } from '../contentStore';
-import { Book } from '../types';
+import { Book, Vestibular } from '../types';
 
 const StudiesPage: React.FC = () => {
   const [books, setBooks] = useState<Book[]>([]);
+  const [vests, setVests] = useState<Vestibular[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const load = async () => {
-      const data = await contentStore.getBooks();
-      setBooks(data);
+      const [booksData, vestsData] = await Promise.all([
+        contentStore.getBooks(),
+        contentStore.getVestibulares()
+      ]);
+      setBooks(booksData);
+      setVests(vestsData);
       setIsLoading(false);
     };
     load();
@@ -43,7 +48,6 @@ const StudiesPage: React.FC = () => {
                    </span>
                 </div>
               ))}
-              {books.length === 0 && !isLoading && <p className="text-center py-10 text-slate-300 font-black uppercase text-xs italic">Nenhuma obra cadastrada.</p>}
             </div>
           </section>
 
@@ -67,22 +71,14 @@ const StudiesPage: React.FC = () => {
              <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-full -mr-12 -mt-12"></div>
              <h3 className="text-2xl font-black italic uppercase tracking-tighter mb-8 text-yellow-400 border-b border-white/10 pb-4">Vestibulares 2026</h3>
              <div className="space-y-6">
-                {[
-                  { name: 'ENEM', date: 'Novembro', color: 'bg-white/10' },
-                  { name: 'FUVEST', date: 'Novembro', color: 'bg-white/10' },
-                  { name: 'UNESP', date: 'Dezembro', color: 'bg-white/10' },
-                ].map((v, i) => (
-                  <div key={i} className={`${v.color} p-5 rounded-2xl flex justify-between items-center group hover:bg-yellow-400 hover:text-blue-900 transition-all cursor-pointer`}>
+                {vests.map((v) => (
+                  <div key={v.id} className="bg-white/10 p-5 rounded-2xl flex justify-between items-center group hover:bg-yellow-400 hover:text-blue-900 transition-all">
                     <span className="font-black uppercase italic">{v.name}</span>
                     <span className="text-[10px] font-black uppercase tracking-widest">{v.date}</span>
                   </div>
                 ))}
+                {vests.length === 0 && <p className="text-xs text-blue-200 font-bold uppercase text-center opacity-50">Nenhuma data marcada.</p>}
              </div>
-          </div>
-          
-          <div className="p-8 bg-yellow-400 rounded-[2.5rem] text-blue-900 text-center shadow-lg">
-             <h4 className="font-black text-lg uppercase italic tracking-tighter">Material Grátis</h4>
-             <p className="text-[10px] font-bold uppercase leading-relaxed mt-2">Acesse as apostilas na biblioteca da escola portando sua carteirinha.</p>
           </div>
         </div>
       </div>
