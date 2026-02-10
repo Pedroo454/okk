@@ -149,7 +149,7 @@ const App: React.FC = () => {
             <div>
               <h4 className="font-bold mb-4 uppercase text-sm tracking-widest text-yellow-400">Desenvolvimento</h4>
               <p className="text-[10px] text-blue-300 uppercase font-black tracking-widest">
-                Grêmio Estudantil - Gestão 2024
+                Grêmio Estudantil - Gestão 2026
               </p>
             </div>
           </div>
