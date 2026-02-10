@@ -38,7 +38,7 @@ const AboutPage: React.FC = () => {
             </div>
           </div>
           <div className="rounded-[3rem] overflow-hidden shadow-2xl rotate-2 order-1 md:order-2">
-            <img src="https://images.unsplash.com/photo-1523050853063-bd8012fec21b?q=80&w=800&auto=format&fit=crop" alt="Educação 2026" className="w-full h-auto" />
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2crJq6JEGtVV2Kc2760dHx9h5Ass1USHMqg&s" alt="Educação 2026" className="w-full h-auto" />
           </div>
         </section>
 
@@ -54,7 +54,7 @@ const AboutPage: React.FC = () => {
             </div>
             <div className="p-6 bg-white/5 rounded-2xl backdrop-blur-sm border border-white/10">
               <span className="block font-black text-yellow-400 uppercase text-[9px] tracking-widest mb-4">Gestão Grêmio</span>
-              <p className="text-sm font-medium">Presidente: João Silva<br/>Gestão 2026/2027</p>
+              <p className="text-sm font-medium"><br/>Gestão 2025/2026</p>
             </div>
           </div>
         </footer>
