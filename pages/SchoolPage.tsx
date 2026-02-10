@@ -13,7 +13,7 @@ const SchoolPage: React.FC = () => {
         <div className="animate-fade-in">
           <h2 className="text-2xl font-bold text-blue-800 mb-6 flex items-center">
             <span className="w-8 h-1 bg-yellow-400 mr-3"></span>
-            Calendário Letivo 2024
+            Calendário Letivo 2026
           </h2>
           <div className="space-y-6">
             {[
@@ -56,7 +56,7 @@ const SchoolPage: React.FC = () => {
           <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
             <h3 className="text-xl font-bold text-slate-800 mb-3 italic">Infraestrutura</h3>
             <p className="text-slate-600 mb-4 text-sm leading-relaxed">
-              Nossa unidade conta com quadra coberta, biblioteca atualizada, laboratório de informática e espaços de convivência pensados para o bem-estar da comunidade.
+              Nossa unidade conta com quadra coberta, biblioteca atualizada, laboratório de informática e espaços de convivência pensados para o bem-estar dos alunos.
             </p>
             <button className="text-blue-600 text-xs font-bold hover:underline uppercase tracking-widest">Conhecer Espaço &rarr;</button>
           </div>
